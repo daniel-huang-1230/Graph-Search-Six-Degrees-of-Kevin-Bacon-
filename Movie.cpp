@@ -17,14 +17,14 @@ string Movie::getName(){
 }
 
 
-vector<string> Movie::getCast() {
+vector<Actor*> Movie::getCast() {
     
     return this->cast;
 }
 
 //add the name of the actor to the cast
-void Movie::addToCast(string actor_name) {
-    this->getCast().push_back(actor_name);
+void Movie::addToCast(Actor* actor) {
+    this->getCast().push_back(actor);
     
     
 }

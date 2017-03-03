@@ -77,11 +77,12 @@ bool ActorGraph::loadFromFile(const char* in_filename, bool use_weighted_edges) 
         if(movieList.find(&newMovie)==movieList.end()) {
             //if movie is not yet in the list, add it to the moveList
             this->movieList.insert(&newMovie);
-            newMovie.addToCast(newActor.getName()); //add the actor name to the cast of the movie
+            newMovie.addToCast(&newActor); //add the actor name to the cast of the movie
 
         }
-        else { //the movie is already added in the list previously
-            (*(movieList.find(&newMovie)))->addToCast(newActor.getName());
+        else { //the movie is already added in the list previously,
+               // then just go ahead and add the actor to its cast
+            (*(movieList.find(&newMovie)))->addToCast(&newActor);
         }
         
     }
@@ -106,7 +107,20 @@ bool ActorGraph::loadFromFile(const char* in_filename, bool use_weighted_edges) 
 void ActorGraph::buildGraph() {
     
     //iterate through every movie in the movieList and check their casts
-    
+    for(unordered_set<Movie*>::iterator it=movieList.begin(); it!=movieList.end(); it++){
+        if((*it)->getCast().size()>1) {
+            //if there are more than one actor in a movie, connect them all!
+            for(int i=0; i<(*it)->getCast().size();i++) {
+                for(int j=0; j<(*it)->getCast().size();j++){
+                    if(j!=i) {
+                        (*it)->getCast().at(i)->connect((*it)->getCast().at(j));
+                    }
+                }
+            }
+        
+            
+        }
+    }
     
 }
 
