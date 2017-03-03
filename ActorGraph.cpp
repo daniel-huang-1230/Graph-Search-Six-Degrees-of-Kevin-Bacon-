@@ -12,13 +12,16 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <iterator>
 #include "ActorGraph.h"
+
 
 using namespace std;
 
 ActorGraph::ActorGraph(void) {}
 
 bool ActorGraph::loadFromFile(const char* in_filename, bool use_weighted_edges) {
+
     // Initialize the file stream
     ifstream infile(in_filename);
 
@@ -59,8 +62,31 @@ bool ActorGraph::loadFromFile(const char* in_filename, bool use_weighted_edges) 
         int movie_year = stoi(record[2]);
     
         // we have an actor/movie relationship, now what?
-    }
+        
+        Actor newActor=Actor(actor_name);
 
+        if(actorList.find(&newActor)==actorList.end()) {
+            //actor is not yet in the list, so add it
+       
+        this->actorList.insert(&newActor);
+        }
+        
+        Movie newMovie=Movie(movie_title,movie_year);
+        
+        
+        if(movieList.find(&newMovie)==movieList.end()) {
+            //if movie is not yet in the list, add it to the moveList
+            this->movieList.insert(&newMovie);
+            newMovie.addToCast(newActor.getName()); //add the actor name to the cast of the movie
+
+        }
+        else { //the movie is already added in the list previously
+            (*(movieList.find(&newMovie)))->addToCast(newActor.getName());
+        }
+        
+    }
+//at theis point, we should have all the actors and movies stores to our two sets
+    
     if (!infile.eof()) {
         cerr << "Failed to read " << in_filename << "!\n";
         return false;
@@ -68,4 +94,20 @@ bool ActorGraph::loadFromFile(const char* in_filename, bool use_weighted_edges) 
     infile.close();
 
     return true;
+    
 }
+
+
+
+
+/** Build the graph with the information read from the file
+ *  PRECONDITION: loadFromFile has been called
+ */
+void ActorGraph::buildGraph() {
+    
+    //iterate through every movie in the movieList and check their casts
+    
+    
+}
+
+

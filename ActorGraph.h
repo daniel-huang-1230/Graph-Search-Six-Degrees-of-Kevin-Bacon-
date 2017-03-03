@@ -11,15 +11,20 @@
 #define ACTORGRAPH_H
 
 #include <iostream>
-
+#include "Actor.h"
+#include "Movie.h"
+#include <unordered_set>
 // Maybe include some data structures here
 
 using namespace std;
 
 class ActorGraph {
 protected:
-  
     // Maybe add class data structure(s) here
+    
+//use unordered_set to achieve fast search and retrieval
+    unordered_set<Actor* > actorList;
+    unordered_set<Movie* > movieList;
 
 public:
     ActorGraph(void);
@@ -36,6 +41,12 @@ public:
      * return true if file was loaded sucessfully, false otherwise
      */
     bool loadFromFile(const char* in_filename, bool use_weighted_edges);
+    
+    
+    /** Build the graph with the information read from the file
+     *  PRECONDITION: loadFromFile has been called 
+     */
+    void buildGraph();
   
 };
 
