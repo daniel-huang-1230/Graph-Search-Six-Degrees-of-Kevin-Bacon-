@@ -1,11 +1,11 @@
-//
-//  Movie.cpp
-//  PA4(Xcode project)
-//
-//  Created by Daniel Huang on 3/2/17.
-//  Copyright © 2017 Daniel Huang. All rights reserved.
-//
-
+/*
+ * Movie.cpp
+ * Author: Daniel Huang
+ * Date:   3/02/2017
+ *
+ *  This implementations of the Movie class
+ *
+ */
 
 #include "Movie.h"
 
@@ -17,14 +17,14 @@ string Movie::getName(){
 }
 
 
-vector<Actor*> Movie::getCast() {
+vector<Actor*>* Movie::getCast() {
     
     return this->cast;
 }
 
 //add the name of the actor to the cast
 void Movie::addToCast(Actor* actor) {
-    this->getCast().push_back(actor);
-    
-    
+    this->cast->push_back(actor);
+    actor->setEdge(this, 0);
+       
 }

@@ -13,7 +13,9 @@
 #include <iostream>
 #include "Actor.h"
 #include "Movie.h"
-#include <unordered_set>
+
+#include <unordered_map>
+#include <queue>
 // Maybe include some data structures here
 
 using namespace std;
@@ -23,14 +25,16 @@ protected:
     // Maybe add class data structure(s) here
     
 //use unordered_set to achieve fast search and retrieval
-    unordered_set<Actor* > actorList;
-    unordered_set<Movie* > movieList;
+    unordered_map<string, Actor>*actorList=new  unordered_map<string,Actor>();
+    unordered_map<string, Movie*>* movieList=new unordered_map<string, Movie*>();
 
 public:
-    ActorGraph(void);
-
-    // Maybe add some more methods here
-  
+    ActorGraph();
+    ~ActorGraph();
+    
+    unordered_map<string,Actor >* getActorList();
+    
+    unordered_map<string, Movie*>* getMovieList();
     /** You can modify this method definition as you wish
      *
      * Load the graph from a tab-delimited file of actor->movie relationships.
@@ -47,6 +51,13 @@ public:
      *  PRECONDITION: loadFromFile has been called 
      */
     void buildGraph();
+    
+    Actor findActor(string key);
+    
+    /** The bread-first search algorithm that woul find the shortest path from the 
+     * start actor s
+     */
+    void BFS(Actor* s);
   
 };
 
