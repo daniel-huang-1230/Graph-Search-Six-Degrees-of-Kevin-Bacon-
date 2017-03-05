@@ -23,15 +23,19 @@ class Actor {
 private:
     const string name;
     
-    int dist=-1 ; //the distance from the source vertex/node
-    vector<Actor* > adjList; // the adjacency list to store "neighbors" on the graph
+    int dist ; //the distance from the source vertex/node
+   // vector<Actor* > adjList; // the adjacency list to store "neighbors" on the graph
     
-    pair <Movie*,Actor*> edge;  //the pointer that points to the edge(movie)
-public:
     
+    public:
+    Actor* prev=0;
+    vector<pair<Movie*,Actor*>> edges;
+
     //constructor
-    Actor(string name):name(name),edge(0,0){
-        adjList=vector<Actor*>();
+    Actor(string name):name(name){
+        //adjList=vector<Actor*>();
+        dist=-1;
+        edges=vector<pair<Movie*,Actor*>>();
     }
     
     ~Actor() {} //default destructor
@@ -42,7 +46,7 @@ public:
     //public getters
     string getName();
     
-    vector<Actor* > getAdj();
+    //vector<Actor* > getAdj();
     
     //public getter to get the distance of the actor node
     int getDist();
@@ -50,12 +54,12 @@ public:
     void setDist(int d);
     
     
-    //public getter to get the previous node
-    pair <Movie*,Actor*> getEdge();
+    
+    //vector<Movie*> getEdges();
     
     //public setter to set the previous node
     
-    void setEdge(Movie* m, Actor* a);
+    //void setEdge(Movie* m);
     
     //connect two actors if they co-starred in a movie
     void connect(Actor* actor);

@@ -32,9 +32,10 @@ int main(int argc, char* argv[]) {
         graph.loadFromFile(argv[1], true);
     }
     
-    graph.buildGraph();
+   //build the actual graph representation of actors and movies
+  graph.buildGraph();
 
-       //build the actual graph representation of actors and movies
+    
     
     
     ifstream infile;  //open the test_pairs file
@@ -78,44 +79,59 @@ int main(int argc, char* argv[]) {
         string name1(record[0]);
         Actor actor1=Actor(name1);
       
-        //Actor got1=graph.findActor(actor1.getName());
-        unordered_map<string, Actor>::iterator got1=graph.getActorList()->find(record[0]);
+        unordered_map<string, Actor*>::iterator got1=graph.getActorList()->find(record[0]);
         
         string name2(record[1]);
         Actor actor2=Actor(name2);
         
-        unordered_map<string, Actor>::iterator got2=graph.getActorList()->find(record[1]);
         
         
-        //Actor got2=graph.findActor(actor2.getName());
-            
-            graph.BFS(&(*got1).second); //start from actor1
+        unordered_map<string, Actor*>::iterator got2=graph.getActorList()->find(record[1]);
+        
+        
+        
+      //  cout<<(*got1).second->getName()<<"is actor 1"<<endl;
+        
+    //   graph.BFS((*got1).second); //start from actor1
           
         
     
             stack<Movie*> st = stack <Movie*>(); //initialize a stack for printing out path
-            Actor* curr=&(*got2).second;            //actor2 as the end node
+            Actor* curr=(*got2).second;            //actor2 as the end node
         
        
-            /*while(curr->getEdge().second) { //traverse to the previous actor connected by an edge
-               st.push(curr->getEdge().first);
-
-                curr=curr->getEdge().second; //advance the curr pointer
+            while(curr->prev) { //traverse to the previous actor connected by an edge
+                for(int i=0; i<curr->edges.size();i++){
+                    if(curr->edges[i].second==curr->prev){
+                        st.push(curr->edges[i].first);
+                    }
+                }
+               
+                curr=curr->prev; //advance the curr pointer
             }
-            outfile<<"--["<<st.top()->getName()<<"]"; //print the movie title
-            st.pop();*/
+           //outfile<<"--["<<st.top()->getName()<<"]"; //print the movie title
+            //st.pop();
             
          
         }
     
     //for debugging....
-    for(unordered_map<string, Actor>::iterator it=graph.getActorList()->begin();it!=graph.getActorList()->end();it++){
-        cout<<(*it).second.getDist()<<endl;
-      //  vector<Actor* > adjList= (*it).second.getAdj();
-        //cout<<adjList.size()<<endl;
+    for(unordered_map<string, Actor*>::iterator it=graph.getActorList()->begin();it!=graph.getActorList()->end();it++){
+       //cout<<(*it).second->getName()<<endl;
+         cout<<(*it).second->getName()<<"'s edges size is.."<<(*it).second->edges.size()<<endl;
+        for(int i=0; i<(*it).second->edges.size() ; i++) {
+            cout<<",who starred in "<< (*it).second->edges.at(i).first->getName()<<endl;
+           // cout<<",and co-starred with "<< (*it).second->edges.at(i).second->getName()<<endl;
+
+        }
+     
+    }
+    for(unordered_map<string, Movie*>::iterator it=graph.getMovieList()->begin();it!=graph.getMovieList()->end();it++){
+        //cout<<(*it).second->getName()<<endl;
+      //  cout<<"And the above movie's cast size is..."<<(*it).second->getCast()->size()<<endl;
     }
     //cout<<graph.getActorList()->size()<<endl;
-    //cout<<graph.getMovieList()->size()<<endl;
+    //cout<<"movie total:"<<graph.getMovieList()->size()<<endl;
    
     infile.close();
     outfile.close();

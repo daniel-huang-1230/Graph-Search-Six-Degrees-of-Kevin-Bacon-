@@ -18,11 +18,11 @@ string Actor:: getName() {
 }
 
 //public getter that returns the adjacency list 
-vector<Actor* > Actor:: getAdj() {
+/*vector<Actor* > Actor:: getAdj() {
     return this->adjList;
     
 }
-
+*/
 
 //public getter for the member variable dist
 int Actor:: getDist() {
@@ -36,22 +36,22 @@ void Actor::setDist(int d){
 
 
 //public getter to get the previous node
-pair <Movie*,Actor*> Actor::getEdge(){
+/*Movie* Actor::getEdge(){
     return this->edge;
-}
+}*/
 
 //public setter to set the previous node
-void Actor::setEdge(Movie* m, Actor* a){
-    this->edge.first=m;
-    this->edge.second=a;
-}
+/*void Actor::setEdge(Movie* m){
+    this->edge=m;
+ 
+}*/
 //connect two actors if they co-starred in a movie
-void Actor::connect(Actor* actor) {
+/*void Actor::connect(Actor* actor) {
     this->adjList.push_back(actor);
     
     //connect the two actors with an edge(movie)
    // this->setEdge(edge,0);
     //actor->setEdge(edge,0);
-}
+}*/
 
     

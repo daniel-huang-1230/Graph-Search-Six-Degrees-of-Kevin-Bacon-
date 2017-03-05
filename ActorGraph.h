@@ -25,16 +25,16 @@ protected:
     // Maybe add class data structure(s) here
     
 //use unordered_set to achieve fast search and retrieval
-    unordered_map<string, Actor>*actorList=new  unordered_map<string,Actor>();
+    unordered_map<string, Actor*>*actorList=new  unordered_map<string,Actor*>();
     unordered_map<string, Movie*>* movieList=new unordered_map<string, Movie*>();
 
 public:
     ActorGraph();
     ~ActorGraph();
     
-    unordered_map<string,Actor >* getActorList();
+    unordered_map<string,Actor* >* getActorList();
     
-    unordered_map<string, Movie*>* getMovieList();
+    unordered_map<string, Movie* >* getMovieList();
     /** You can modify this method definition as you wish
      *
      * Load the graph from a tab-delimited file of actor->movie relationships.

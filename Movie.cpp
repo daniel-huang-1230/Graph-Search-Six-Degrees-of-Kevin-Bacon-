@@ -25,6 +25,6 @@ vector<Actor*>* Movie::getCast() {
 //add the name of the actor to the cast
 void Movie::addToCast(Actor* actor) {
     this->cast->push_back(actor);
-    actor->setEdge(this, 0);
+   // actor->setEdge(this);
        
 }
