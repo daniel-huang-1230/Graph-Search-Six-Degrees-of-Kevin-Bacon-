@@ -52,7 +52,7 @@ public:
      */
     void buildGraph();
     
-    Actor findActor(string key);
+    //void connectActor(Actor* a1, Actor* a2, Movie* costar);
     
     /** The bread-first search algorithm that woul find the shortest path from the 
      * start actor s

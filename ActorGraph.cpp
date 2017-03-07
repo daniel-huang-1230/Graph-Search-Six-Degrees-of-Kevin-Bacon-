@@ -41,7 +41,7 @@ bool ActorGraph::loadFromFile(const char* in_filename, bool use_weighted_edges) 
     ifstream infile;
     infile.open(in_filename);
     bool have_header = false;
-        // keep reading lines until the end of file is reached
+    // keep reading lines until the end of file is reached
     while (infile) {
         string s;
         
@@ -57,9 +57,8 @@ bool ActorGraph::loadFromFile(const char* in_filename, bool use_weighted_edges) 
         
         istringstream ss( s );
         vector <string> record;
-        //Actor newActor;
-        //Movie newMovie;
-
+        
+        
         while (ss) {
             string next;
             
@@ -86,7 +85,7 @@ bool ActorGraph::loadFromFile(const char* in_filename, bool use_weighted_edges) 
         //Concatenate the name and year of the movie for comparison
         string namePlusYear=newMovie->getName()+"#@"+to_string(movie_year);
         
-        
+        pair<string,Actor*> actorPair (newActor->getName(), newActor);
         
         
         if(movieList->find(namePlusYear)==movieList->end()) {
@@ -97,41 +96,55 @@ bool ActorGraph::loadFromFile(const char* in_filename, bool use_weighted_edges) 
             
             
             unordered_map<string,Movie*>::iterator it=this->getMovieList()->find(namePlusYear);
-            (*it).second->addToCast(newActor); //add e actor to the cast of the movie
             
-            pair<Movie*,Actor*> pair(newMovie, newActor);
-            //if actor is present in the list
+           
+            
+            //if the actor is already in the actor ist
             if(getActorList()->find(actor_name)!=actorList->end()){
-                (getActorList()->find(actor_name))->second->edges.push_back(pair);
+                std::pair<Movie*,Actor*> pair((*it).second, (*actorList->find(actor_name)).second);
+
+                (actorList->find(actor_name))->second->edges.push_back(pair);
+                (*it).second->addToCast((*actorList->find(actor_name)).second); //add the actor to the cast of the movie
+                
+
             }
             else{
+               
+                this->actorList->insert(actorPair); // insert the actor to the list
+                unordered_map<string,Actor*>::iterator it2=this->getActorList()->find(actor_name);
+
+                pair<Movie*,Actor*> pair((*it).second,(*it2).second);
+
                 newActor->edges.push_back(pair); //add the movie to the actor's edges
+                (*it).second->addToCast((*it2).second);
             }
             
         }
         else { //the movie is already added in the list previously,
             // then just go ahead and add the actor to its cast
             unordered_map<string,Movie*>::iterator it=this->getMovieList()->find(namePlusYear);
-            (*it).second->addToCast(newActor);
+           
+        
             
-            pair<Movie*,Actor*> pair(newMovie, newActor);
-            if(getActorList()->find(actor_name)!=actorList->end()){
-                (getActorList()->find(actor_name))->second->edges.push_back(pair);
+            //if the actor is already in the actor ist
+            if(actorList->find(actor_name)!=actorList->end()){
+                pair<Movie*,Actor*> pair((*it).second, (actorList->find(actor_name))->second);
+                (actorList->find(actor_name))->second->edges.push_back(pair);
+                 (*it).second->addToCast(actorList->find(actor_name)->second);
             }
             else{
+                std::pair<Movie*,Actor*> pair((*it).second, newActor);
+                this->actorList->insert(actorPair);
                 newActor->edges.push_back(pair); //add the movie to the actor's edges
+                (*it).second->addToCast(newActor);
             }
+            
             
         }
         
-
-        if(actorList->find(actor_name)==actorList->end()) {
-            //actor is not yet in the list, so add it
-            
-            pair<string,Actor*> actorPair (newActor->getName(), newActor);
-            this->actorList->insert(actorPair);
-                   }
-           }
+        free(newActor);
+        free(newMovie);
+    }
     //at theis point, we should have all the actors and movies stores to our two sets
     
     if (!infile.eof()) {
@@ -155,23 +168,33 @@ void ActorGraph::buildGraph() {
     
     //iterate through every movie in the movieList and check their casts
     for(unordered_map<string,Movie*>::iterator it=this->getMovieList()->begin(); it!=this->getMovieList()->end(); it++){
+               
         if((*it).second->getCast()->size()>1) {
             //if there are more than one actor in a movie, connect them all with edges
+            
             for(int i=0; i<(*it).second->getCast()->size();i++) {
+                
                 for(int j=0; j<(*it).second->getCast()->size();j++){
-                    if(j!=i) {
-                        int idx=0;
+                    if(i!=j) {
+                        
                         for(int k=0; k<(*it).second->getCast()->at(i)->edges.size();k++){
+                           
+                            
                             if((*it).second->getCast()->at(i)->edges[k].first==(*it).second){
-                                idx=k;
-                               
+                                
+                                
+                                std::pair<Movie*,Actor*> pair((*it).second->getCast()->at(i)->edges.at(k).first, (*it).second->getCast()->at(j));
+                                (*it).second->getCast()->at(i)->edges.at(k)=pair;
+                                
+                                std::pair<Movie*,Actor*> pair2((*it).second->getCast()->at(j)->edges[k].first, (*it).second->getCast()->at(i));
+                                
+                                
+                                (*it).second->getCast()->at(j)->edges[k]=pair2;
+                                
+                                
                             }
                         }
                         
-                        //cout<<(*it).second->getCast()->at(i)->edges[idx].second->getName()<<" is the name "<<endl;
-                        // pair<Movie*,Actor*> pair((*it).second->getCast()->at(i)->edges[idx].first, (*it).second->getCast()->at(j));
-                       // (*it).second->getCast()->at(i)->edges[idx].second=(*it).second->getCast()->at(j);
-                         //(*it).second->getCast()->at(i)->edges[idx]=pair;
                         
                     }
                 }
@@ -196,13 +219,13 @@ void ActorGraph::BFS(Actor* s) {
     while(!queue.empty()) {
         curr=queue.front(); //set the curr node
         queue.pop();
-        //cout<<curr->edges.size()<<"is the edge numbers"<<endl;
+        
         for(int i=0; i<curr->edges.size();i++) {
             //for each of curr's neighbors, n
             if(curr->edges.at(i).second->getDist()==-1){
-                curr->edges.at(i).second->setDist(curr->getDist()+1);
+                curr->edges.at(i).second->setDist((curr->getDist())+1);
                 curr->edges.at(i).second->prev=curr;
-             queue.push(curr->edges.at(i).second); //enqueue n
+                queue.push(curr->edges.at(i).second); //enqueue n
             }
         }
     }
@@ -210,14 +233,10 @@ void ActorGraph::BFS(Actor* s) {
 }
 
 
-//Actor* ActorGraph::findActor(string key) {
-    //unordered_map<string,Actor*>::iterator it=this->getActorList()->find(key);
-    
-  //  return (*it)->second;
-//}
 
 ActorGraph::~ActorGraph() {
-     //delete movieList;
-    //delete actorList;
+    delete movieList;
+    delete actorList;
+    
 }
 
