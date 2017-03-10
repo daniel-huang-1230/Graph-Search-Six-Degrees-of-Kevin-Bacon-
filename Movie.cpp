@@ -16,6 +16,9 @@ string Movie::getName(){
     return this->name;
 }
 
+int Movie:: getYear() {
+    return this->year;
+}
 
 vector<Actor*>* Movie::getCast() {
     

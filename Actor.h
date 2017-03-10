@@ -24,44 +24,41 @@ private:
     const string name;
     
     int dist ; //the distance from the source vertex/node
-   // vector<Actor* > adjList; // the adjacency list to store "neighbors" on the graph
-    
+   
+    bool done;
     
     public:
-    Actor* prev=0;
-    vector<pair<Movie*,Actor*>> edges;
+    
+    //Actor* prev=0;
+    std::pair<Movie*,Actor*> prev;
+    
+    
+    vector <pair<Movie*,Actor*>>* edges;
 
     //constructor
     Actor(string name):name(name){
-        //adjList=vector<Actor*>();
         dist=-1;
-        edges=vector<pair<Movie*,Actor*>>();
+        edges=new vector<pair<Movie*,Actor*>>();
     }
     
-    ~Actor() {} //default destructor
+    ~Actor() {
+        //delete edges;
+    } //default destructor
     
     bool operator==(const Actor& other) const{
         return (name==other.name);
     }
     //public getters
     string getName();
-    
-    //vector<Actor* > getAdj();
+    bool   isDone();
     
     //public getter to get the distance of the actor node
     int getDist();
     //public setter to set the distance of the node
     void setDist(int d);
     
+    void setDone(bool isDone);
     
-    
-    //vector<Movie*> getEdges();
-    
-    //public setter to set the previous node
-    
-    //void setEdge(Movie* m);
-    
-    //connect two actors if they co-starred in a movie
     void connect(Actor* actor);
     
 };

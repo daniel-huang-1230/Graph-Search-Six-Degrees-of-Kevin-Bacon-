@@ -16,6 +16,7 @@
 
 #include <unordered_map>
 #include <queue>
+//#include <priority_queue>
 // Maybe include some data structures here
 
 using namespace std;
@@ -57,8 +58,11 @@ public:
     /** The bread-first search algorithm that woul find the shortest path from the 
      * start actor s
      */
-    void BFS(Actor* s);
-  
+    void BFS(Actor* s, Actor* e);
+    
+    /** Dijkstra's algorithm to find the lowest cost path
+     */
+    void Dij(Actor*from);
 };
 
 
