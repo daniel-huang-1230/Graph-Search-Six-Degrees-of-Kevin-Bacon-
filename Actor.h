@@ -29,7 +29,7 @@ private:
     
     public:
     
-    //Actor* prev=0;
+    
     std::pair<Movie*,Actor*> prev;
     
     

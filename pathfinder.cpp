@@ -15,6 +15,7 @@
 
 using namespace std;
 int main(int argc, char* argv[]) {
+    bool weighted=false;
     //check the number of arguments first
     if(argc!=5) {
         cout<<"Invalid number of arguments, please try again"<<endl;
@@ -27,9 +28,11 @@ int main(int argc, char* argv[]) {
     //for the checkpoint, 'u' will always be passed in
     if(*(argv[2])=='u') {
         graph.loadFromFile(argv[1], false);
+        weighted=false;
     }
     else if (*(argv[2])=='w') {
         graph.loadFromFile(argv[1], true);
+        weighted=true;
     }
     
     
@@ -99,17 +102,19 @@ int main(int argc, char* argv[]) {
         unordered_map<string, Actor*>::iterator end=graph.getActorList()->find(record[1]);
         
         
-        
-        graph.BFS((*start).second, (*end).second); //start from actor1
-        
-        
+        if(!weighted) { //unweighted graph, use BFS
+            graph.BFS((*start).second, (*end).second); //start from actor1
+        }
+        else { //weighted graph, use Dijkstra's algorithm
+            graph.Dij((*start).second);
+        }
         
         stack<string> st = stack <string>(); //initialize a stack for printing out path
         Actor* curr=(*end).second;            //actor2 as the end node
         
         st.push("("+curr->getName()+")"); //store the actor name
         
-        while(curr->prev.first&&curr->prev.second) {
+        while(curr->prev.first) {
             
             
             st.push("--["+curr->prev.first->getName()+"]-->");
@@ -151,7 +156,7 @@ int main(int argc, char* argv[]) {
             //   cout<<"the prev of actor: "<<(*it).second->getName()<<" is "<<(*it).second->prev.second->getName()<<endl;
         }
     }
-    cout<<"there are total this many actors: "<<graph.getActorList()->size()<<endl;
+    
     for(unordered_map<string, Movie*>::iterator it=graph.getMovieList()->begin();it!=graph.getMovieList()->end();it++)
     {
         // if((*it).first=="ELEPHANT WHITE#@2011"){

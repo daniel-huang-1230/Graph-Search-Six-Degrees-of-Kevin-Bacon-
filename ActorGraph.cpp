@@ -238,7 +238,6 @@ void ActorGraph::BFS(Actor* s, Actor* e) {
                 
                 neig->prev.second=curr; //set the actor in prev fields
                 neig->prev.first=curr->edges->at(i).first;//set the movie in prev fields
-                // for(int i=0; i<curr->edges->size();i++) {
                 
                 queue.push(neig); //enqueue n
                 
@@ -248,46 +247,54 @@ void ActorGraph::BFS(Actor* s, Actor* e) {
     //at this point we have finished the search and done exploring from S
 }
 
+
 /** Dijkstra's algorithm to find the lowest cost path
  */
-/*void ActorGraph::Dij(Actor*from) {
- //initialize the priority queue
- priority_queue <pair<int,Actor*>, vector<pair<int,Actor*>>, greater<pair<int,Actor*>>> pq;
- 
- for(unordered_map<string,Actor*>::iterator it=this->getActorList()->begin(); it!=this->getActorList()->end(); it++){
- (*it).second->setDist(-1);  //set all nodes' distance to -1
- (*it).second->prev=0;   //reset the prev for all nodes
- (*it).second->setDone(false); //set done fields to false
- }
- //enqueue {0, from} to the queue
- std::pair<int, Actor*> pair(0,from);
- pq.push(pair);
- while(!pq.empty()) {
- std::pair<int, Actor*> curr=pq.top();
- //dequeue curr pair from the queue
- pq.pop();
- //if curr pair's node, v,  is not done
- if(curr.second->isDone()==false){
- curr.second->setDone(true); //set it to done
- //for each v's neighbor
- for(int i=0; i<curr.second->edges->size();i++){
- //edgeWeight is from v to it's neighbor,w
- //int edgeWeight=curr.second->edges->at(i).first->getYear()-2015+1;
- //int cost= curr.second->getDist()+edgeWeight;
- int cost=curr.second->getDist()+1;
- if(cost < curr.second->edges->at(i).second->getDist()){
- curr.second->edges->at(i).second->prev=curr.second;
- curr.second->edges->at(i).second->setDist(cost);
- std::pair<int, Actor*> next(cost, curr.second->edges->at(i).second);
- pq.push(next); //enqueue {c,w}
- }
- }
- }
- 
- }
- 
- }
- */
+void ActorGraph::Dij(Actor*from) {
+    //initialize the priority queue
+    priority_queue <pair<int,Actor*>, vector<pair<int,Actor*>>, greater<pair<int,Actor*>>> pq;
+    
+    for(unordered_map<string,Actor*>::iterator it=this->getActorList()->begin(); it!=this->getActorList()->end(); it++){
+        (*it).second->setDist(numeric_limits<int>::max());  //set all nodes' distance to infinity
+        std::pair<Movie*,Actor*> nullpair(0,0);
+        (*it).second->prev=nullpair;   //reset the prev for all nodes
+        (*it).second->setDone(false); //set done fields to false
+    }
+    //set the dist of the start actor to 0
+     from->setDist(0);
+    std::pair<int, Actor*> pair(from->getDist(),from);
+    //enqueue {0, from} to the queue
+    pq.push(pair);
+    
+    while(!pq.empty()) {
+        std::pair<int, Actor*> curr=pq.top();
+        //dequeue curr pair from the queue
+        pq.pop();
+        //if curr pair's node, v,  is not done
+        if(curr.second->isDone()==false){
+            curr.second->setDone(true); //set it to done
+            //for each v's neighbor
+            for(int i=0; i<curr.second->edges->size();i++){
+                //edgeWeight is from v to it's neighbor,w
+                int edgeWeight=2015-curr.second->edges->at(i).first->getYear()+1;
+                int cost= curr.second->getDist()+edgeWeight;
+                
+                Actor* neig =curr.second->edges->at(i).second;
+                //int cost=curr.second->getDist()+1;
+                if(cost < neig->getDist()){
+                    neig->prev.second=curr.second;
+                    neig->prev.first=curr.second->edges->at(i).first;
+                    neig->setDist(cost);
+                    std::pair<int, Actor*> next(neig->getDist(), neig);
+                    pq.push(next); //enqueue {c,w}
+                }
+            }
+        }
+        
+    }
+    
+}
+
 
 
 ActorGraph::~ActorGraph() {

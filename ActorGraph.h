@@ -26,7 +26,7 @@ protected:
     // Maybe add class data structure(s) here
     
 //use unordered_set to achieve fast search and retrieval
-    unordered_map<string, Actor*>*actorList=new  unordered_map<string,Actor*>();
+    unordered_map<string, Actor*>* actorList=new  unordered_map<string,Actor*>();
     unordered_map<string, Movie*>* movieList=new unordered_map<string, Movie*>();
 
 public:
