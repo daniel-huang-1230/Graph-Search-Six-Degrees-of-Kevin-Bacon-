@@ -33,6 +33,8 @@ public:
     ActorGraph();
     ~ActorGraph();
     
+    bool weighted; //indicate if the path is calculated in the weighted manner or not
+    
     unordered_map<string,Actor* >* getActorList();
     
     unordered_map<string, Movie* >* getMovieList();
@@ -52,6 +54,12 @@ public:
      *  PRECONDITION: loadFromFile has been called 
      */
     void buildGraph();
+    
+    /** Build the graph by connecting all edges between actors after(including) 
+     *  a certain year.
+     *  PRECONDITION: loadFromFile has been called
+     */
+    void buildGraph(int year);
     
     //void connectActor(Actor* a1, Actor* a2, Movie* costar);
     

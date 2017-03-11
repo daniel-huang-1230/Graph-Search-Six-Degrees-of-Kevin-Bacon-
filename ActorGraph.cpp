@@ -38,7 +38,7 @@ unordered_map<string,Movie*>* ActorGraph:: getMovieList() {
 }
 
 bool ActorGraph::loadFromFile(const char* in_filename, bool use_weighted_edges) {
-    //TODO: use_weighted_edges not yet implemented!!!
+    
     
     // Initialize the file stream
     ifstream infile;
@@ -180,10 +180,7 @@ void ActorGraph::buildGraph() {
                 for(int j=0; j<(*it).second->getCast()->size();j++){
                     if(i!=j) {
                         
-                        // for(int k=0; k<(*it).second->getCast()->at(i)->edges->size();k++){
-                        
-                        
-                        //if((*it).second->getCast()->at(i)->edges->at(k).first==(*it).second){
+                       
                         
                         Actor* a1= (*it).second->getCast()->at(i);
                         Actor* a2= (*it).second->getCast()->at(j);
@@ -199,6 +196,42 @@ void ActorGraph::buildGraph() {
             
         }
     }
+    
+}
+/** Build the graph by connecting all edges between actors after(including)
+ *  a certain year.
+ *  PRECONDITION: loadFromFile has been called
+ */
+void ActorGraph:: buildGraph(int year) {
+    
+    //iterate through every movie in the movieList and check their casts
+    for(unordered_map<string,Movie*>::iterator it=this->getMovieList()->begin(); it!=this->getMovieList()->end(); it++){
+        
+        //additionally, check the year of the movie to see if it's after a certain year
+        if((*it).second->getCast()->size()>1&&(*it).second->getYear()>=year) {
+            //if there are more than one actor in a movie, connect them all with edges
+            
+            for(int i=0; i<(*it).second->getCast()->size();i++) {
+                
+                for(int j=0; j<(*it).second->getCast()->size();j++){
+                    if(i!=j) {
+                        
+                        
+                        Actor* a1= (*it).second->getCast()->at(i);
+                        Actor* a2= (*it).second->getCast()->at(j);
+                        std::pair<Movie*,Actor*> p((*it).second,a2);
+                        a1->edges->push_back(p);
+                        
+                        
+                        
+                    }
+                }
+            }
+            
+            
+        }
+    }
+
     
 }
 

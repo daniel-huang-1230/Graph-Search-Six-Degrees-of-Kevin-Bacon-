@@ -14,7 +14,7 @@ else
     LDFLAGS += -g
 endif
 
-all: pathfinder
+all: pathfinder actorconnections
 
 
 
@@ -22,7 +22,7 @@ all: pathfinder
 
 pathfinder: ActorGraph.o Movie.o Actor.o 
 
-
+actorconnections: ActorGraph.o Movie.o Actor.o
 
 # include what ever source code *.h files ActorGraph relies on (these are merely the ones that were used in the solution)
 
@@ -33,5 +33,5 @@ Movie.o:Movie.h
 Actor.o:Actor.h
 
 clean:
-	rm -f pathfinder *.o core*
+	rm -f pathfinder *.o  actorconnections core*
 

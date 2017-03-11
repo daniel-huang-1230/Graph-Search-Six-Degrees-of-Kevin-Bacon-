@@ -28,11 +28,11 @@ int main(int argc, char* argv[]) {
     //for the checkpoint, 'u' will always be passed in
     if(*(argv[2])=='u') {
         graph.loadFromFile(argv[1], false);
-        weighted=false;
+        graph.weighted=false;
     }
     else if (*(argv[2])=='w') {
         graph.loadFromFile(argv[1], true);
-        weighted=true;
+        graph.weighted=true;
     }
     
     
@@ -102,7 +102,7 @@ int main(int argc, char* argv[]) {
         unordered_map<string, Actor*>::iterator end=graph.getActorList()->find(record[1]);
         
         
-        if(!weighted) { //unweighted graph, use BFS
+        if(!graph.weighted) { //unweighted graph, use BFS
             graph.BFS((*start).second, (*end).second); //start from actor1
         }
         else { //weighted graph, use Dijkstra's algorithm
