@@ -103,7 +103,8 @@ int main(int argc, char* argv[]) {
     
     
     //the container that holds the actual connected pairs of actors
-    vector<pair<string,int>>* connectedPair=new vector<pair<string,int>>();
+    unordered_map<string,int>* connectedPair
+                                    =new unordered_map<string,int>();
     
     //loop through each year in the possible year range
     for(int yr=earliestYear; yr<=latestYear; yr++) {
@@ -149,13 +150,12 @@ int main(int argc, char* argv[]) {
             }
             //need to check if the same pair has been inserted in earlier year
             
-            string str=start->getName()+'\t'+end->getName()+'\t';
-            
+            string str(start->getName()+'\t'+end->getName()+'\t');
             if(std::find(namePair->begin(), namePair->end(), str)==namePair->end()){
                 namePair->push_back(str); //store the name strings to eliminate
                 //duplicate pairs
                 std::pair<string,int> pairStr(str,yr);
-                connectedPair->push_back(pairStr); //store the connected pair
+                connectedPair->insert(pairStr); //store the connected pair
             }
             
         }
@@ -171,9 +171,14 @@ int main(int argc, char* argv[]) {
     
     outfile<<"Actor1\tActor2\tYear"<<endl;
     
-    for(int i=0;i<connectedPair->size();i++){
-        
-        outfile<<connectedPair->at(i).first<<connectedPair->at(i).second<<endl;
+    for(int i=0;i<pairContainer->size();i++){
+        //find the name pair in order to output the pair in correct order
+        string nameStr(pairContainer->at(i).first->getName()+'\t'
+                         +pairContainer->at(i).second->getName()+'\t');
+        unordered_map<string,int>::iterator it=connectedPair->find(nameStr);
+        if(it!=connectedPair->end()) {
+        outfile<<(*it).first<<(*it).second<<endl;
+        }
     }
     
     
