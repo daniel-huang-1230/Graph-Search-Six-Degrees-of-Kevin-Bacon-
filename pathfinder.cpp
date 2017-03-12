@@ -15,7 +15,6 @@
 
 using namespace std;
 int main(int argc, char* argv[]) {
-    bool weighted=false;
     //check the number of arguments first
     if(argc!=5) {
         cout<<"Invalid number of arguments, please try again"<<endl;
@@ -41,8 +40,8 @@ int main(int argc, char* argv[]) {
     
     
     
-    ifstream infile;  //open the test_pairs file
-    infile.open(argv[3]);
+    ifstream infile(argv[3]);  //open the test_pairs file
+    
     ofstream outfile(argv[4]); //initialize the output file stream
     
     outfile<<"(actor)--[movie#@year]-->(actor)--..."<<endl; //write the header for
@@ -103,6 +102,12 @@ int main(int argc, char* argv[]) {
         
         
         if(!graph.weighted) { //unweighted graph, use BFS
+            for(unordered_map<string,Actor*>::iterator it=graph.getActorList()->begin(); it!=graph.getActorList()->end(); it++){
+                (*it).second->setDist(numeric_limits<int>::max());  //set all nodes' distance to infinity
+                std::pair<Movie*,Actor*> nullpair(0,0);
+                (*it).second->prev=nullpair;   //reset the prev for all nodes
+            }
+
             graph.BFS((*start).second, (*end).second); //start from actor1
         }
         else { //weighted graph, use Dijkstra's algorithm
@@ -142,7 +147,8 @@ int main(int argc, char* argv[]) {
     
     //for debugging
     // cout<<"the size of actor list is "<<graph.getActorList()->size()<<endl;
-    for(unordered_map<string,Actor*>::iterator it=graph.getActorList()->begin(); it!=graph.getActorList()->end(); it++)
+    for(unordered_map<string,Actor*>::iterator it=graph.getActorList()->begin();
+        it!=graph.getActorList()->end(); it++)
     {
         
         // cout<<"print every actor in the list: "<<(*it).second->getName()<<endl;
@@ -157,16 +163,7 @@ int main(int argc, char* argv[]) {
         }
     }
     
-    for(unordered_map<string, Movie*>::iterator it=graph.getMovieList()->begin();it!=graph.getMovieList()->end();it++)
-    {
-        // if((*it).first=="ELEPHANT WHITE#@2011"){
-        
-        for(int i=0; i<(*it).second->getCast()->size();i++) {
-            
-            //  cout<<(*it).second->getName()<<"'s cast : "<<(*it).second->getCast()->at(i)->getName()<<endl;
-        }
-        //}
-    }
+    
     
     //at this point we have read all test pairs
     infile.close();

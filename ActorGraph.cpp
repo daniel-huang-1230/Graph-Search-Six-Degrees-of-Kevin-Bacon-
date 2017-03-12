@@ -106,7 +106,7 @@ bool ActorGraph::loadFromFile(const char* in_filename, bool use_weighted_edges) 
             if(getActorList()->find(actor_name)!=actorList->end()){
                 std::pair<Movie*,Actor*> pair((*it).second, (*actorList->find(actor_name)).second);
                 
-                //(actorList->find(actor_name))->second->edges->push_back(pair);
+                
                 (*it).second->addToCast((*actorList->find(actor_name)).second); //add the actor to the cast of the movie
                 
                 
@@ -118,7 +118,7 @@ bool ActorGraph::loadFromFile(const char* in_filename, bool use_weighted_edges) 
                 
                 pair<Movie*,Actor*> pair((*it).second,(*it2).second);
                 
-                //newActor->edges->push_back(pair); //add the movie to the actor's edges
+                
                 (*it).second->addToCast((*it2).second);
             }
             
@@ -132,13 +132,13 @@ bool ActorGraph::loadFromFile(const char* in_filename, bool use_weighted_edges) 
             //if the actor is already in the actor ist
             if(actorList->find(actor_name)!=actorList->end()){
                 pair<Movie*,Actor*> pair((*it).second, (actorList->find(actor_name))->second);
-                //(actorList->find(actor_name))->second->edges->push_back(pair);
+                
                 (*it).second->addToCast(actorList->find(actor_name)->second);
             }
             else{
                 std::pair<Movie*,Actor*> pair((*it).second, actorPair.second);
                 this->actorList->insert(actorPair);
-                //  actorPair.second->edges->push_back(pair); //add the movie to the actor's edges
+                
                 (*it).second->addToCast(actorPair.second);
             }
             
@@ -208,7 +208,7 @@ void ActorGraph:: buildGraph(int year) {
     for(unordered_map<string,Movie*>::iterator it=this->getMovieList()->begin(); it!=this->getMovieList()->end(); it++){
         
         //additionally, check the year of the movie to see if it's after a certain year
-        if((*it).second->getCast()->size()>1&&(*it).second->getYear()>=year) {
+        if((*it).second->getCast()->size()>1&&(*it).second->getYear()<=year) {
             //if there are more than one actor in a movie, connect them all with edges
             
             for(int i=0; i<(*it).second->getCast()->size();i++) {

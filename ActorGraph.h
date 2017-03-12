@@ -38,6 +38,7 @@ public:
     unordered_map<string,Actor* >* getActorList();
     
     unordered_map<string, Movie* >* getMovieList();
+    
     /** You can modify this method definition as you wish
      *
      * Load the graph from a tab-delimited file of actor->movie relationships.
@@ -60,8 +61,6 @@ public:
      *  PRECONDITION: loadFromFile has been called
      */
     void buildGraph(int year);
-    
-    //void connectActor(Actor* a1, Actor* a2, Movie* costar);
     
     /** The bread-first search algorithm that woul find the shortest path from the 
      * start actor s
