@@ -1,5 +1,5 @@
 /*
- * ActorGraph.cpp
+ * Actor.cpp
  * Author: Daniel Huang
  * Date:   3/02/2017
  *

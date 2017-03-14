@@ -1,5 +1,5 @@
 /*
- * ActorGraph.h
+ * Actor.h
  * Author: Daniel Huang
  * Date:   3/02/2017
  *
