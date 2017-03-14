@@ -12,6 +12,8 @@
 #include <sstream>
 #include <stack>
 #include "ActorGraph.h"
+#include "Movie.h"
+#include "Actor.h"
 
 using namespace std;
 int main(int argc, char* argv[]) {
