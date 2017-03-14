@@ -112,8 +112,7 @@ int main(int argc, char* argv[]) {
         
         
         //the container that holds the actual connected pairs of actors
-        unordered_map<string,int>* connectedPair
-        =new unordered_map<string,int>();
+        unordered_map<string,int>* connectedPair=new unordered_map<string,int>();
         
         //loop through each year in the possible year range
         for(int yr=earliestYear; yr<=latestYear; yr++) {
@@ -172,9 +171,6 @@ int main(int argc, char* argv[]) {
         }
         
         
-        
-        
-        
         outfile<<"Actor1\tActor2\tYear"<<endl;
         
         for(int i=0;i<pairContainer->size();i++){
@@ -209,7 +205,10 @@ int main(int argc, char* argv[]) {
         
         //use a vector to keep track of pairs, eliminate duplicate pairs in
         //different year
-        vector<pair<string,string>>* namePair=new  vector<pair<string,string>>();
+        vector<pair<string,string>>* namePair=new vector<pair<string,string>>();
+        
+        //use to store the connected pair to later ensure the correct printing order
+        unordered_map<string,int>* connectedPair=new unordered_map<string,int>();
         //check for every year in the range
         for(int yr=earliestYear; yr<=latestYear; yr++) {
             bool yearPresent=false;
@@ -231,7 +230,8 @@ int main(int argc, char* argv[]) {
                 
             }
             
-            for(unordered_map<string,Movie*>::iterator it=graph.getMovieList()->begin();it!=graph.getMovieList()->end();it++)
+            for(unordered_map<string,Movie*>::iterator it=
+                graph.getMovieList()->begin();it!=graph.getMovieList()->end();it++)
             {
                 if((*it).second->getYear()==yr){
                     //if the cast of each movie in this year is greater than 1,
@@ -244,8 +244,7 @@ int main(int argc, char* argv[]) {
                         Actor* actor2=currMovie->getCast()->at(i+1);
                         
                         
-                        //string sentinel1=disjointSet.getSentinel(actor1);
-                        //string sentinel2=disjointSet.getSentinel(actor2);
+                        
                         
                         disjointNode n1=disjointNode(actor1);
                         disjointNode n2=disjointNode(actor2);
@@ -264,10 +263,10 @@ int main(int argc, char* argv[]) {
                             
                         }
                         
-                        //finished union
+                        //finished union operation
                     }
                     
-                   
+                    
                     for(int i=0; i<pairContainer->size();i++) {
                         
                         string start=pairContainer->at(i).first->getName();
@@ -282,14 +281,18 @@ int main(int argc, char* argv[]) {
                         disjointSet.upTreeMap->find(end);
                         
                         
+                        //if start and end actors belong to the same set
                         if((*itStart).second->getSentinel()==(*itEnd).second->getSentinel()) {
                             pair<string,string> strPair(start,end);
                             //check if the pair is not yet printed
-                            if(std::find(namePair->begin(), namePair->end(), strPair)==namePair->end()){
+                            if(std::find(namePair->begin(), namePair->end(), strPair)
+                               ==namePair->end()){
                                 
                                 namePair->push_back(strPair);
-                                outfile<<start<<'\t'<<end<<'\t'<<yr<<endl;
+                                pair<string,int> connectedP(start+'\t'+end+'\t',yr);
+                                connectedPair->insert(connectedP);
                             }
+                            
                             
                         }
                         
@@ -298,14 +301,30 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
+        //ready to print
+        outfile<<"Actor1\tActor2\tYear"<<endl;
+        
+        for(int i=0;i<pairContainer->size();i++){
+            //find the name pair in order to output the pair in correct order
+            string nameStr(pairContainer->at(i).first->getName()+'\t'
+                           +pairContainer->at(i).second->getName()+'\t');
+            unordered_map<string,int>::iterator it=connectedPair->find(nameStr);
+            if(it!=connectedPair->end()) {
+                outfile<<(*it).first<<(*it).second<<endl;
+            }
+            
+            //if the pair are never connected at all after all possible years
+            else {
+                outfile<<nameStr<<"9999"<<endl;
+            }
+        }
+        
+        //free up previously allocated memory
+        delete namePair;
+        delete connectedPair;
         
         
     } ///////////////////////////////////using union-find ends///////////////////
-    
-    
-    
-    
-    
     
     
     infile.close();
