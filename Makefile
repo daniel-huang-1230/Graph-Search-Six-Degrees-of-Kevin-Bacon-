@@ -33,5 +33,5 @@ Movie.o:Movie.h
 Actor.o:Actor.h
 util.o:util.h
 clean:
-	rm -f pathfinder *.o  actorconnections core*
+	rm -f pathfinder *.o actorconnections core*
 
