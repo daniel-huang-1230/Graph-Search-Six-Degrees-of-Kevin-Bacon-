@@ -1,3 +1,6 @@
+#ifndef UNIONFIND_HPP
+#define UNIONFIND_HPP
+
 #include "ActorGraph.h"
 #include <vector>
 /*
@@ -143,6 +146,8 @@ void UnionFind:: unionUnite(disjointNode* n1, disjointNode* n2) {
     
 }
 
+
+#endif
 
 
 
