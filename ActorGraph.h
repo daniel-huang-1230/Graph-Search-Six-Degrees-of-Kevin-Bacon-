@@ -27,8 +27,8 @@ protected:
     // Maybe add class data structure(s) here
     
 //use unordered_set to achieve fast search and retrieval
-    std::unordered_map<string, Actor*>* actorList=new  unordered_map<string,Actor*>();
-    std::unordered_map<string, Movie*>* movieList=new unordered_map<string, Movie*>();
+    std::unordered_map<string, Actor*>* actorList;
+    std::unordered_map<string, Movie*>* movieList;
 
 public:
     ActorGraph();
