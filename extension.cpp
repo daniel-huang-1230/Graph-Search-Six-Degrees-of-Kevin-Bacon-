@@ -5,3 +5,7 @@
  *
  * This is the extension program for the last part of PA4
  */
+int main(int argc, char* argv[]){
+    
+    return 0;
+}
