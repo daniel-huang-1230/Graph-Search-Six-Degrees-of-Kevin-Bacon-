@@ -31,7 +31,7 @@ actorconnections: ActorGraph.o Movie.o Actor.o util.o
 Movie.o:Movie.h
 Actor.o:Actor.h
 util.o:util.h
-ActorGraph.o: UnionFind.hpp Movie.h ActorGraph.h Actor.h util.h
+ActorGraph.o: Movie.h ActorGraph.h Actor.h util.h
 
 clean:
 	rm -f pathfinder *.o actorconnections core*
