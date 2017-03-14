@@ -13,6 +13,7 @@
 #include <iostream>
 #include "Actor.h"
 #include "Movie.h"
+#include "util.h"  //use the timer class from PA2
 
 #include <unordered_map>
 #include <queue>

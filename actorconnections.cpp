@@ -13,6 +13,7 @@
 #include <sstream>
 #include "UnionFind.hpp"
 using namespace std; //for cleaner looking code
+long BILLION=1000000000; //to convert nanosecond to second
 
 //actorconnections will take 4 command line arguments
 int main(int argc, char* argv[]) {
@@ -103,10 +104,13 @@ int main(int argc, char* argv[]) {
     
     ofstream outfile(argv[3]); //initialize the output file stream
     
+    Timer timer; //create a timer object
+    
     ///////////////////////////////////using the BFS start////////////////////////
     
-    if(argv[4]==NULL||string(argv[4])=="bfs") {
+    if(argv[4]!=NULL&&string(argv[4])=="bfs") {
         
+        timer.begin_timer(); //start the timer
         //initialize anther vector container to store all name pairs that are connected
         vector<string>* namePair=new vector<string>();
         
@@ -191,13 +195,18 @@ int main(int argc, char* argv[]) {
         //free up previously allocated memory
         delete namePair;
         delete connectedPair;
+        
+        //end the timer and print out time taken
+        cout<<"It takes "<<(timer.end_timer()/BILLION)<<" seconds to finish BFS!"<<endl;
     }
     ///////////////////////////////////using the BFS ends////////////////////////
     
     
     ///////////////////////////////////using union-find starts///////////////////
     
-    else{
+    else{  //if the fourth argument is not given, use ufind as default
+        
+        timer.begin_timer(); //start the timer
         
         //initialize the disjoint set
         UnionFind disjointSet=UnionFind(&graph);
@@ -242,8 +251,6 @@ int main(int argc, char* argv[]) {
                         
                         Actor* actor1=currMovie->getCast()->at(i);
                         Actor* actor2=currMovie->getCast()->at(i+1);
-                        
-                        
                         
                         
                         disjointNode n1=disjointNode(actor1);
@@ -323,7 +330,8 @@ int main(int argc, char* argv[]) {
         delete namePair;
         delete connectedPair;
         
-        
+        //end the timer and print out time taken
+               cout<<"It takes "<<(timer.end_timer()/BILLION)<<" seconds to finish ufind!"<<endl;
     } ///////////////////////////////////using union-find ends///////////////////
     
     

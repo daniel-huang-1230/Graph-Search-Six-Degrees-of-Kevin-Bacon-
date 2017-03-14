@@ -180,19 +180,15 @@ void ActorGraph::buildGraph() {
                 for(int j=0; j<(*it).second->getCast()->size();j++){
                     if(i!=j) {
                         
-                       
-                        
+                        //connect actor with each other appearing in the same movie
                         Actor* a1= (*it).second->getCast()->at(i);
                         Actor* a2= (*it).second->getCast()->at(j);
                         std::pair<Movie*,Actor*> p((*it).second,a2);
                         a1->edges->push_back(p);
                         
-                        
-                        
                     }
                 }
             }
-            
             
         }
     }

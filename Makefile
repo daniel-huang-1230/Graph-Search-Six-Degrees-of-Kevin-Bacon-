@@ -22,16 +22,16 @@ all: pathfinder actorconnections
 
 pathfinder: ActorGraph.o Movie.o Actor.o 
 
-actorconnections: ActorGraph.o Movie.o Actor.o
+actorconnections: ActorGraph.o Movie.o Actor.o util.o
 
 # include what ever source code *.h files ActorGraph relies on (these are merely the ones that were used in the solution)
 
 # Note: you do not have to include a *.cpp file if it aleady has a paired *.h file that is already included with class/method headers
 
-ActorGraph.o: UnionFind.hpp Movie.h ActorGraph.h Actor.h
+ActorGraph.o: UnionFind.hpp Movie.h ActorGraph.h Actor.h util.h
 Movie.o:Movie.h
 Actor.o:Actor.h
-
+util.o:util.h
 clean:
 	rm -f pathfinder *.o  actorconnections core*
 
