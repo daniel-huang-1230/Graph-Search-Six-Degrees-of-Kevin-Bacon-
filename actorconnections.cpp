@@ -206,11 +206,15 @@ int main(int argc, char* argv[]) {
         //initialize the disjoint set
         UnionFind disjointSet=UnionFind(&graph);
         
+        
+        //use a vector to keep track of pairs, eliminate duplicate pairs in
+        //different year
+        vector<pair<string,string>>* namePair=new  vector<pair<string,string>>();
         //check for every year in the range
         for(int yr=earliestYear; yr<=latestYear; yr++) {
             bool yearPresent=false;
             
-             
+            
             //only build the disjoint set when there were movies in the certain year
             for(unordered_map<string,Movie*>::iterator it=
                 graph.getMovieList()->begin(); it!=graph.getMovieList()->end(); it++)
@@ -218,63 +222,79 @@ int main(int argc, char* argv[]) {
                 if((*it).second->getYear()==yr&&(*it).second->getCast()->size()>1){
                     
                     yearPresent=true;
-                    //break;
+                    break;
                 }
                 
                 if(!yearPresent) {
                     continue;  //if there were no movie appear in a certain year, skip the iteration
                 }
                 
+            }
             
-                
-                                 //if the cast of each movie in this year is greater than 1,
-                // union the actor nodes
+            for(unordered_map<string,Movie*>::iterator it=graph.getMovieList()->begin();it!=graph.getMovieList()->end();it++)
+            {
+                if((*it).second->getYear()==yr){
+                    //if the cast of each movie in this year is greater than 1,
+                    // union the actor nodes
                     Movie* currMovie=(*it).second;
                     for(int i=0; i<currMovie->getCast()->size()-1;i++){
                         
                         
-                            string actor1=currMovie->getCast()->at(i)->getName();
-                            string actor2=currMovie->getCast()->at(i+1)->getName();
-                            
-                           
-                            string sentinel1=disjointSet.getSentinel(actor1);
-                            string sentinel2=disjointSet.getSentinel(actor2);
+                        Actor* actor1=currMovie->getCast()->at(i);
+                        Actor* actor2=currMovie->getCast()->at(i+1);
                         
-                        unordered_map<string,string>::iterator it1=
-                            disjointSet.upTreeMap->find(sentinel1);
-
-                        unordered_map<string,string>::iterator it2=
-                        disjointSet.upTreeMap->find(sentinel2);
-                            if(sentinel1!=sentinel1) {
-                                //union all sets that are connected
-                                disjointSet.unionUnite((*it1).first, (*it2).first);
-                                
-                            }
+                        
+                        //string sentinel1=disjointSet.getSentinel(actor1);
+                        //string sentinel2=disjointSet.getSentinel(actor2);
+                        
+                        disjointNode n1=disjointNode(actor1);
+                        disjointNode n2=disjointNode(actor2);
+                        
+                        unordered_map<string,disjointNode*>::iterator it1=
+                        disjointSet.upTreeMap->find(n1.getActor()->getName());
+                        
+                        unordered_map<string,disjointNode*>::iterator it2=
+                        disjointSet.upTreeMap->find(n2.getActor()->getName());
+                        
+                        if((*it1).first!=(*it2).first){
+                            //connect two set
                             
+                            disjointSet.unionUnite((*it1).second, (*it2).second);
+                            
+                            
+                        }
                         
                         //finished union
                     }
-                for(int i=0; i<pairContainer->size();i++) {
+                    
                    
-                    string start=pairContainer->at(i).first->getName();
-
-                    string end=pairContainer->at(i).second->getName();
-                    
-                    
-                    //find the start actor and end actor from the set
-                    unordered_map<string,string>::iterator itStart=
-                    disjointSet.upTreeMap->find(start);
-                    unordered_map<string,string>::iterator itEnd=
-                    disjointSet.upTreeMap->find(end);
-
-                    
-                    if(disjointSet.getSentinel((*itStart).first)
-                       ==disjointSet.getSentinel((*itEnd).second)) {
+                    for(int i=0; i<pairContainer->size();i++) {
                         
-                        outfile<<start<<'\t'<<end<<'\t'<<yr<<endl;
+                        string start=pairContainer->at(i).first->getName();
+                        
+                        string end=pairContainer->at(i).second->getName();
+                        
+                        
+                        //find the start actor and end actor from the set
+                        unordered_map<string,disjointNode*>::iterator itStart=
+                        disjointSet.upTreeMap->find(start);
+                        unordered_map<string,disjointNode*>::iterator itEnd=
+                        disjointSet.upTreeMap->find(end);
+                        
+                        
+                        if((*itStart).second->getSentinel()==(*itEnd).second->getSentinel()) {
+                            pair<string,string> strPair(start,end);
+                            //check if the pair is not yet printed
+                            if(std::find(namePair->begin(), namePair->end(), strPair)==namePair->end()){
+                                
+                                namePair->push_back(strPair);
+                                outfile<<start<<'\t'<<end<<'\t'<<yr<<endl;
+                            }
+                            
+                        }
                         
                     }
-                
+                    
                 }
             }
         }
@@ -290,7 +310,7 @@ int main(int argc, char* argv[]) {
     
     infile.close();
     outfile.close();
-
+    
     
     //free up previously allocated memory
     delete pairContainer;
