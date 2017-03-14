@@ -15,7 +15,7 @@
 using namespace std;
 
 
-//class Movie; //forward declaration
+class Movie; //forward declaration
 //the class of the node objects
 
 class Actor{
