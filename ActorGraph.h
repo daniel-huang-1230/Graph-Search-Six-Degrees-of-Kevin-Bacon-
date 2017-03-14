@@ -27,8 +27,8 @@ protected:
     // Maybe add class data structure(s) here
     
 //use unordered_set to achieve fast search and retrieval
-    std::unordered_map<string, Actor::Actor*>* actorList=new  unordered_map<string,Actor::Actor*>();
-    std::unordered_map<string, Movie::Movie*>* movieList=new unordered_map<string, Movie::Movie*>();
+    std::unordered_map<string, Actor*>* actorList=new  unordered_map<string,Actor*>();
+    std::unordered_map<string, Movie*>* movieList=new unordered_map<string, Movie*>();
 
 public:
     ActorGraph();
@@ -36,9 +36,9 @@ public:
     
     bool weighted; //indicate if the path is calculated in the weighted manner or not
     
-    std::unordered_map<string,Actor::Actor* >* getActorList();
+    std::unordered_map<string,Actor* >* getActorList();
     
-    std::unordered_map<string, Movie::Movie* >* getMovieList();
+    std::unordered_map<string, Movie* >* getMovieList();
     
     /** You can modify this method definition as you wish
      *
