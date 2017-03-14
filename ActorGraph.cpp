@@ -6,7 +6,7 @@
  * This file is meant to exist as a container for starter code that you can use to read the input file format
  * defined in movie_casts.tsv. Feel free to modify any/all aspects as you wish.
  */
-
+#include "ActorGraph.h"
 #include <fstream>
 
 #include <iostream>
@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 #include <iterator>
-#include "ActorGraph.h"
+
 
 
 
