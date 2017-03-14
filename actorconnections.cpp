@@ -163,8 +163,16 @@ int main(int argc, char* argv[]) {
                 //need to check if the same pair has been inserted in earlier year
                 
                 string str(start->getName()+'\t'+end->getName()+'\t');
-                if(std::find(namePair->begin(), namePair->end(), str)==namePair->end()){
-                    namePair->push_back(str); //store the name strings to eliminate
+                
+                bool present=false;
+                for( vector<string>::iterator it=namePair->begin(); it!=namePair->end(); it++){
+                    
+                    if((*it)==str) {
+                        present=true;
+                    }
+                }
+                if(!present) {
+                     namePair->push_back(str); //store the name strings to eliminate
                     //duplicate pairs
                     std::pair<string,int> pairStr(str,yr);
                     connectedPair->insert(pairStr); //store the connected pair
@@ -292,8 +300,14 @@ int main(int argc, char* argv[]) {
                         if((*itStart).second->getSentinel()==(*itEnd).second->getSentinel()) {
                             pair<string,string> strPair(start,end);
                             //check if the pair is not yet printed
-                            if(std::find(namePair->begin(), namePair->end(), strPair)
-                               ==namePair->end()){
+                            bool present=false;
+                            for( vector<pair<string,string>>::iterator it=namePair->begin(); it!=namePair->end(); it++){
+                                
+                                if((*it)==strPair) {
+                                    present=true;
+                                }
+                            }
+                            if(!present) {
                                 
                                 namePair->push_back(strPair);
                                 pair<string,int> connectedP(start+'\t'+end+'\t',yr);
