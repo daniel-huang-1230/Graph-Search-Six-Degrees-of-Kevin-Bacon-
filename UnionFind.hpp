@@ -32,18 +32,22 @@ public:
         
         this->up=n;
     }
+    //getter that returns the parent node in the up-tree structure
     disjointNode* getUpNode() {
         return this->up;
     }
     
+    //getter for the number of nodes that are connected to the calling node
     int getSize() {
         return this->size;
     }
     
+    //set the number of nodes connected to the calling node
     void setSize(int n) {
         this->size=n;
     }
     
+    //return/find the sentinel node
     disjointNode* getSentinel(){
         disjointNode* node=this;
         while(node->getUpNode()!=NULL&&node->getUpNode()!=node){
@@ -52,6 +56,7 @@ public:
         return node;
     }
     
+    //get the actor pointer that is stored in the disjointNode
     Actor* getActor() {
         
         return this->actor;
