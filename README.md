@@ -15,6 +15,7 @@ actors/actresses and find the shortest sequence of shared movies between them.
 in the graph and adds new movies step-by-step to find the earliest movie year to connect the start actor to the destination 
 actor.
 
+**NOTE**: We were allowed to either team up with other students or try to complete the project alone. I chose to go **solo**.
 
 #Language 
 
