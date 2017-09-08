@@ -17,7 +17,7 @@ actor.
 
 **NOTE**: We were allowed to either team up with other students or try to complete the project alone. I chose to go **solo**.
 
-#Language 
+# Language 
 
  This program is written in **C++**
 
